@@ -10,7 +10,7 @@ final class Controller extends Package
 {
     protected $pkgHandle = 'event_tracking';
     protected $appVersionRequired = '8.2.1';
-    protected $pkgVersion = '1.0.1';
+    protected $pkgVersion = '1.0.2';
     protected $pkgAutoloaderRegistries = [
         'src/EventTracking' => '\A3020\EventTracking',
     ];

@@ -5,22 +5,22 @@ namespace A3020\EventTracking;
 use Concrete\Core\Asset\AssetList;
 use Concrete\Core\Config\Repository\Repository;
 use Concrete\Core\Http\ResponseAssetGroup;
-use Concrete\Core\Logging\Logger;
 use Exception;
+use Psr\Log\LoggerInterface;
 
 class PageView
 {
     /**
-     * @var Repository
+     * @var \Concrete\Core\Config\Repository\Repository
      */
     private $config;
 
     /**
-     * @var Logger
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
-    public function __construct(Repository $config, Logger $logger)
+    public function __construct(Repository $config, LoggerInterface $logger)
     {
         $this->config = $config;
         $this->logger = $logger;
@@ -31,7 +31,7 @@ class PageView
         try {
             $this->registerGoogleAnalytics();
         } catch (Exception $e) {
-            $this->logger->addDebug($e->getMessage());
+            $this->logger->debug($e->getMessage());
         }
     }
 
