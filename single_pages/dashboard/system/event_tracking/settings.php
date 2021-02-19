@@ -6,6 +6,7 @@ use Concrete\Core\Support\Facade\Url;
 
 /** @var \Concrete\Core\Validation\CSRF\Token $token */
 /** @var bool $enableGoogleAnalytics */
+/** @var bool $enableGtag */
 ?>
 
 <div class="ccm-dashboard-content-inner">
@@ -33,7 +34,18 @@ use Concrete\Core\Support\Facade\Url;
                 <?php
                 echo $form->checkbox('enableGoogleAnalytics', 1, $enableGoogleAnalytics);
                 ?>
-                <?php echo t('Enable Google Analytics integration'); ?>
+                <?php echo t('Enable Google Analytics analytics.js integration'); ?>
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label launch-tooltip"
+                   title="<?php echo t('If enabled, events will be sent to Google Analytics.') ?>"
+                   for="enableGoogleAnalytics">
+                <?php
+                echo $form->checkbox('enableGtag', 1, $enableGtag);
+                ?>
+                <?php echo t('Enable Google Analytics gtag.js integration'); ?>
             </label>
         </div>
 

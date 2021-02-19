@@ -13,7 +13,8 @@ final class Settings extends DashboardPageController
         /** @var Repository $config */
         $config = $this->app->make(Repository::class);
 
-        $this->set('enableGoogleAnalytics', (bool) $config->get('event_tracking::settings.integrations.google_analytics', true));
+        $this->set('enableGoogleAnalytics', (bool) $config->get('event_tracking::settings.integrations.google_analytics', false));
+        $this->set('enableGtag', (bool) $config->get('event_tracking::settings.integrations.gtag', true));
     }
 
     public function save()
@@ -27,6 +28,7 @@ final class Settings extends DashboardPageController
         /** @var Repository $config */
         $config = $this->app->make(Repository::class);
         $config->save('event_tracking::settings.integrations.google_analytics', (bool) $this->post('enableGoogleAnalytics'));
+        $config->save('event_tracking::settings.integrations.gtag', (bool) $this->post('enableGtag'));
 
         $this->flash('success', t('Your settings have been saved.'));
 

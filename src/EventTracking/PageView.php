@@ -29,6 +29,7 @@ class PageView
     public function handle($event)
     {
         try {
+            $this->registerGtag();
             $this->registerGoogleAnalytics();
         } catch (Exception $e) {
             $this->logger->debug($e->getMessage());
@@ -36,14 +37,44 @@ class PageView
     }
 
     /**
+     * Pushes events to e.g. Google Analytics via the gtag implementation.
+     *
+     * @see https://developers.google.com/analytics/devguides/collection/gtagjs/
+     *
+     * @throws \Exception
+     */
+    private function registerGtag()
+    {
+        // Only load the JS if this integration is enabled.
+        if (!(bool) $this->config->get('event_tracking::settings.integrations.gtag', true)) {
+            return;
+        }
+
+        $al = AssetList::getInstance();
+
+        $al->register(
+            'javascript',
+            'event_tracking/gtag',
+            'js/gtag.js',
+            [],
+            'event_tracking'
+        );
+
+        $assetGroup = ResponseAssetGroup::get();
+        $assetGroup->requireAsset('javascript', 'event_tracking/gtag');
+    }
+
+    /**
      * Pushes events to e.g. Google Analytics.
+     *
+     * @see https://developers.google.com/analytics/devguides/collection/analyticsjs/
      *
      * @throws \Exception
      */
     private function registerGoogleAnalytics()
     {
         // Only load the JS if this integration is enabled.
-        if (!(bool) $this->config->get('event_tracking::settings.integrations.google_analytics', true)) {
+        if (!(bool) $this->config->get('event_tracking::settings.integrations.google_analytics', false)) {
             return;
         }
 
