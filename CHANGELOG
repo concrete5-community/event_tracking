@@ -1,0 +1,14 @@
+1.0.0
+- Add DOMContentLoaded function to make sure inline Analytics code has run first.
+- Add post install screen to point to settings page.
+- Add link to RTF settings page.
+- Move 'ga'-check to the top of the onclick handler.
+
+0.9.1
+- Wrap pkg description in t-function.
+- Add settings page to enable/disable Google Analytics integration.
+- Don't 'force register' the CKEditor plugin, but add it to the site config.
+- Add "Event Tracking" toolbar icon in CKEditor.
+
+0.9.0
+- Initial version.
