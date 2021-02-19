@@ -1,3 +1,7 @@
+1.0.1
+- Load .js asset via page event, to prevent Composer issue.
+- Remove DOMContentLoaded function, because ga-check is now in the onclick handler.
+
 1.0.0
 - Add DOMContentLoaded function to make sure inline Analytics code has run first.
 - Add post install screen to point to settings page.

@@ -7,7 +7,6 @@ use Concrete\Core\Application\ApplicationAwareTrait;
 use Concrete\Core\Asset\AssetList;
 use Concrete\Core\Config\Repository\Repository;
 use Concrete\Core\Editor\Plugin;
-use Concrete\Core\Http\ResponseAssetGroup;
 use Concrete\Core\Logging\Logger;
 use Exception;
 
@@ -25,20 +24,29 @@ class Provider implements ApplicationAwareInterface
      */
     private $logger;
 
-    public function __construct(Repository $config, Logger $logger)
+    public function __construct(Logger $logger)
     {
-        $this->config = $config;
         $this->logger = $logger;
     }
 
     public function register()
     {
         try {
+            $this->listeners();
             $this->registerEditorPlugin();
-            $this->registerGoogleAnalytics();
         } catch (Exception $e) {
             $this->logger->addDebug($e->getMessage());
         }
+    }
+
+    private function listeners()
+    {
+        // This is to prevent issues with C5's Composer.
+        $this->app['director']->addListener('on_page_view', function($event) {
+            /** @var PageView $listener */
+            $listener = $this->app->make(PageView::class);
+            $listener->handle($event);
+        });
     }
 
     /**
@@ -68,31 +76,5 @@ class Provider implements ApplicationAwareInterface
             ->getPluginManager();
 
         $pluginManager->register($plugin);
-    }
-
-    /**
-     * Pushes events to e.g. Google Analytics.
-     *
-     * @throws \Exception
-     */
-    private function registerGoogleAnalytics()
-    {
-        // Only load the JS if this integration is enabled.
-        if (!(bool) $this->config->get('event_tracking::settings.integrations.google_analytics', true)) {
-            return;
-        }
-
-        $al = AssetList::getInstance();
-
-        $al->register(
-            'javascript',
-            'event_tracking/google_analytics',
-            'js/google-analytics.js',
-            [],
-            'event_tracking'
-        );
-
-        $assetGroup = ResponseAssetGroup::get();
-        $assetGroup->requireAsset('javascript', 'event_tracking/google_analytics');
     }
 }
